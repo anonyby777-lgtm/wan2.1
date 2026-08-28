@@ -243,6 +243,12 @@ def _parse_args():
         type=float,
         default=5.0,
         help="Classifier free guidance scale.")
+    parser.add_argument(
+        "--neg_prompt",
+        type=str,
+        default="",
+        help="Negative prompt for content exclusion. If empty, the task's "
+        "built-in negative prompt (config.sample_neg_prompt) is used.")
 
     args = parser.parse_args()
 
@@ -378,6 +384,7 @@ def generate(args):
             sample_solver=args.sample_solver,
             sampling_steps=args.sample_steps,
             guide_scale=args.sample_guide_scale,
+            n_prompt=args.neg_prompt,
             seed=args.base_seed,
             offload_model=args.offload_model)
 
