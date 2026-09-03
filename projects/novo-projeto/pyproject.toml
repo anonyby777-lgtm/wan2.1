@@ -1,0 +1,10 @@
+[project]
+name = "novo-projeto"
+version = "0.1.0"
+description = "Projeto inicial"
+requires-python = ">=3.9"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
