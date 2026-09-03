@@ -83,3 +83,20 @@ Outras opções: `--text`, `--cap-frac`, `--lift`, `--crf` (ver `apply_watermark
 - A fonte Nunito é SIL Open Font License (ver `fonts/OFL.txt`) — redistribuição permitida.
 - `imageio-ffmpeg` fornece o binário ffmpeg; não depende de instalação de sistema.
 - Em sandboxes com reinício, o venv some: recriá-lo leva ~10 s (ver "Como executar").
+
+## Estilo "tela final NUAKY" (assinatura de encerramento — projeto Vinland Saga)
+
+- **Tipografia**: Cinzel Bold (estilo Trajan/roman caps — a mesma família do texto
+  original "SANTARONI27"), tracking ~0,12–0,16 em, branco/cinza-claro com bloom sutil
+  (blur σ2 + σ11 somados ao núcleo).
+- **Título**: caps ≈ 15% da altura do quadro (108 px em 720), centro em (50%, ~52,5% H).
+- **Rodapé**: "© NUAKY COPYRIGHT RESERVED." Cinzel Regular ~15 px no rodapé interior
+  (y ≈ 704 em 720, mesma posição do footer original do vídeo).
+- **Fundo**: quase preto (média ~10–12 de 255) com brasas vermelho/laranja profundos
+  nos cantos (gaussianas de baixa intensidade), faixa panorâmica sugerida por
+  linhas quentes quase imperceptíveis e nuvem difusa atrás do título.
+- **Moldura**: retângulo arredondado fino (inset 9 px, raio 16, traço 2 px, cinza ~150).
+- **Timing**: medir o corte da tela final original (hard-cut pós-flash) e o envelope de
+  luminância do título/rodapé quadro a quadro; replicar exatamente (entrada instantânea,
+  decaimento gradual, rodapé some antes do título).
+- Fontes em `fonts/` são todas SIL OFL (Nunito, Playfair Display, Cinzel — ver OFL.txt).
