@@ -81,16 +81,15 @@ def estimate_old_watermark_mask(input_path, W, H, n_samples=110):
         # marca tem largura ~40% W e altura ~15-30px
         if 200 < area < 8000 and w > 100 and h < 50:
             filtered[labels==i] = 255
-    # se filtragem remover tudo, volta máscara original do roi
-    if cv2.countNonZero(filtered) < 50:
-        # fallback: usa bbox central estimado
+    # se filtragem remover tudo ou for muito pequena (watermark não detectado bem), usa fallback expandido
+    if cv2.countNonZero(filtered) < 1500:
+        # fallback: usa bbox central estimado - aumentado para vídeos 1280x718 com marca @JAPAEDITS
         filtered = np.zeros_like(mask)
-        # estima bbox da marca antiga: centro horizontal, rodapé
-        # tamanho aproximado observado: 300x18 em 720
-        est_w = int(W*0.45)
-        est_h = int(22 * (H/720))
+        # estima bbox da marca antiga: centro horizontal, rodapé - ajustado para ser mais preciso
+        est_w = int(W*0.35)  # 448 em 1280, cobre @JAPAEDITS__LG (~282) com margem generosa
+        est_h = int(36 * (H/720))
         x0 = (W - est_w)//2
-        y0 = H - 22 - 8  # 8px margem
+        y0 = H - est_h - 18  # 18px margem do fundo, centralizado verticalmente no rodapé
         # tenta detectar texto para refinar: usa thresh dentro do bbox
         # se não tiver detecção, cria máscara retangular mesmo (inpaint retangular funciona)
         # vamos usar retângulo + dilatação do thresh dentro dele
@@ -459,12 +458,9 @@ def main():
         ok, fr = cap.read()
         if not ok:
             break
-        # inpaint marca antiga (se houver)
+        # inpaint marca antiga (se houver) - raio 5 para remoção mais limpa neste vídeo
         if mask is not None and cv2.countNonZero(mask)>0:
-            # inpaint só na região da máscara
-            # usar TELEA raio 3 (mais conservador para não borrar fundo)
-            # opencv inpaint precisa de 8-bit mask
-            fr = cv2.inpaint(fr, mask, 3, cv2.INPAINT_TELEA)
+            fr = cv2.inpaint(fr, mask, 5, cv2.INPAINT_TELEA)
         # adicionar novo footer (additive)
         fr = np.clip(fr.astype(np.float32) + footer_lift[:, :, None], 0, 255).astype(np.uint8)
         # moldura (sobrepor)
